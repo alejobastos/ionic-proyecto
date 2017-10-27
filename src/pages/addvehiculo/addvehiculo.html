@@ -7,12 +7,33 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>addvehiculo</ion-title>
+    <ion-title>Agregar vehiculo</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+    <form>
+        <ion-list>
+            
+              <ion-item>
+                <ion-input type="text" placeholder="Placa" [(ngModel)]="viajero.cedula" name="cedula" #cedula="ngModel"></ion-input>
+              </ion-item>        
+              <ion-item>
+                <ion-input type="text" placeholder="Caracterisitica" [(ngModel)]="viajero.nombre" name="nombre" #nombre="ngModel"></ion-input>
+              </ion-item>
+              <ion-item>
+                 <ion-input type="text" placeholder="Estado" [(ngModel)]="viajero.apellido" name="apellido" #apellido="ngModel"></ion-input>
+              </ion-item>
+                    
+            </ion-list> 
+            
+          </form>
+    
+            <div padding>
+                <button ion-button type="button" (click)="onSaveViajero()">Agregar</button>                       
+              </div>
 
 </ion-content>
