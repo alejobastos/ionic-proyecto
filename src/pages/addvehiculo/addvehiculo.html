@@ -19,13 +19,13 @@
         <ion-list>
             
               <ion-item>
-                <ion-input type="text" placeholder="Placa" [(ngModel)]="viajero.cedula" name="cedula" #cedula="ngModel"></ion-input>
+                <ion-input type="text" placeholder="Placa" [(ngModel)]="vehiculo.placa" name="placa" #placa="ngModel"></ion-input>
               </ion-item>        
               <ion-item>
-                <ion-input type="text" placeholder="Caracterisitica" [(ngModel)]="viajero.nombre" name="nombre" #nombre="ngModel"></ion-input>
+                <ion-input type="text" placeholder="Caracterisitica" [(ngModel)]="vehiculo.caracteristica" name="caracteristica" #caracteristica="ngModel"></ion-input>
               </ion-item>
               <ion-item>
-                 <ion-input type="text" placeholder="Estado" [(ngModel)]="viajero.apellido" name="apellido" #apellido="ngModel"></ion-input>
+                 <ion-input type="text" placeholder="Estado" [(ngModel)]="vehiculo.estado" name="estado" #estado="ngModel"></ion-input>
                 </ion-item>
                     
             </ion-list> 
@@ -33,7 +33,7 @@
           </form>
     
             <div padding>
-                <button ion-button type="button" (click)="onSaveViajero()">Agregar</button>                       
+                <button ion-button type="button" (click)="onSaveVehiculo()">Agregar</button>                       
               </div>
 
 </ion-content>
