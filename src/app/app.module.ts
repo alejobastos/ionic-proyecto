@@ -13,6 +13,7 @@ import { NewProductPage} from '../pages/new-product/new-product';
 import { LoginServicesProvider } from '../providers/login-services/login-services';
 import { ProductServicesProvider } from '../providers/product-services/product-services';
 import { Vehiculo } from '../app/interfaces/vehiculo.interface';
+import { ServiceProvider } from '../providers/service/service';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { Vehiculo } from '../app/interfaces/vehiculo.interface';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoginServicesProvider,
-    ProductServicesProvider
+    ProductServicesProvider,
+    ServiceProvider
   ]
 })
 export class AppModule {}
