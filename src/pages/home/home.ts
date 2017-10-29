@@ -1,51 +1,97 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import{ ProductServicesProvider} from "../../providers/product-services/product-services";
-import { NewProductPage} from "../new-product/new-product";
+import { NavController} from 'ionic-angular';
+import { Vehiculo } from "../../app/interfaces/vehiculo.interface";
+import { ServiceProvider } from "../../providers/service/service";
+import { Refresher } from "ionic-angular";
+import { AddvehiculoPage } from "../addvehiculo/addvehiculo";
+import { ModalController, LoadingController, AlertController } from 'ionic-angular';
+
+
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage  implements OnInit{
+export class HomePage {
 
-  token: string;
-  products: string[];
+  vehiculoList:Array<Vehiculo>;
+  loading: any;
 
-  constructor(public navCtrl: NavController, private navParams: NavParams,
-    public productServices: ProductServicesProvider){
-    this.token = navParams.get('token');  
-    }
-
-    ngOnInit() {
-      this.getProducts();
-    }
-
-    deleteProduct(id){
-      this.productServices.deleteProduct(this.token,id).then((pdct) => {
-        //let respuesta = JSON.parse(pdct["_body"]);
-        //this.products = respuesta.products;
-        this.getProducts();
-      }).catch((err) => {
-          console.log(err);
-      })
-    }
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public Service:ServiceProvider, public modalCtrl: ModalController) {
+    this.loading = this.loadingCtrl.create({
+      content: '<ion-spinner></ion-spinner>'
+    });
     
+    this.getData();
+  }
 
-    newProduct(){
-      this.navCtrl.push(NewProductPage,{
-        token: this.token
-      });
-    }
+  getData(){
+    
+    this.loading.present();
+    this.Service.CargarVehiculo().subscribe(
+      result => {
+        this.vehiculoList = result;
+        console.log("success: " + this.vehiculoList);
+      },
+      err => {
+        console.error("Error: " + err);
+      },
+      () => {
+        this.loading.dismiss();
+        console.log("getData Completed!");
+      }
+    );
+  }
 
-    getProducts(){
-      this.productServices.getProduct(this.token).then((pdct) => {
-        let respuesta = JSON.parse(pdct["_body"]);
-        this.products = respuesta.products;
-      }).catch((err) => {
-          console.log(err);
-      })
-    }
+  recargar_vehiculo(refresher:Refresher)
+  {
+    console.log("Inicio del refresh");
+    setTimeout(()=>{
+      console.log("Terminó el refresh");
+      this.Service.CargarVehiculo(); 
+      this.Service.CargarVehiculo().subscribe(
+        result => {
+          this.vehiculoList = result;
+        },
+        err => {},
+        () => {}
+      );
+      refresher.complete();
+    }, 1500)
+  }
+
+  borrar_vehiculo(idx:number){
+    this.vehiculoList.splice(idx, 1);
+  }
+
+  agregarVehiculo() {
+    let modal = this.modalCtrl.create(AddvehiculoPage);
+    modal.present();
+  }
+
+  eliminarVehiculo(placa: string) {
+
+    const alert = this.alertCtrl.create({
+      title: 'Eliminar Vehiculo',
+      message: 'Desea eliminar el vehiculo?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            this.Service.eliminarVehiculo(placa);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
   
   }
 

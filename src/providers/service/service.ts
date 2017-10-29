@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { HttpClient } from '@angular/common/http';
 import { Vehiculo } from '../../app/interfaces/vehiculo.interface';
 import { AlertController } from 'ionic-angular';
 
@@ -13,48 +12,105 @@ import { AlertController } from 'ionic-angular';
 */
 @Injectable()
 export class ServiceProvider {
+  headers: Headers;
+  headersPost: Headers;
+  options: RequestOptions;
 
-  vehiculoListService: Array<Vehiculo>
-
-  constructor(private http: HttpClient, public alertCtrl: AlertController) {
+  constructor(private http: Http, public alertCtrl: AlertController) {
     console.log('Hello ServiceProvider Provider');
   }
 
  CargarVehiculo() {  
        
-    this.http.get('http://localhost:8080/tiquetesapp/webresources/entidades.viajero').subscribe(data => {
-      // Read the result field from the JSON response.
-      this.vehiculoListService = data as Array<Vehiculo>;
-    });
+  this.headersPost = new Headers({
+    'Content-Type':'application/x-www-form-urlencoded',
+    'Access-Control-Allow-Origin':'*',
+    'user':'1',
+    'passwd':'admin'
+  });
+
+  let optionspost = new RequestOptions({
+    headers: this.headersPost
+  })
+
+  return this.http.get('http://192.168.1.50:8080/monitoreo/webresources/co.edu.monitoreo.entidades.vehiculo', optionspost).map(res => res.json());
  }
 
- guardarVehiculo(vehiculo:Vehiculo){   
+ guardarVehiculo(placa:string, caracteristicas:string, estado:string){   
   
-const body = {
-  placa: vehiculo.placa,
-  caracteristica: vehiculo.caracteristicas,
-  estado: vehiculo.estado,
- 
-  };
+  this.headersPost = new Headers({
+    'Content-Type':'application/x-www-form-urlencoded',
+    'Access-Control-Allow-Origin':'*',
+    'user':'1',
+    'passwd':'admin'
+  });
 
-console.log(body)
+  let optionspost = new RequestOptions({
+    headers: this.headersPost
+  })
 
-this.http.post('http://localhost:8080/tiquetesapp/webresources/entidades.viajero',body).subscribe(data => {
-    
-    let alert = this.alertCtrl.create({
-      title: 'Vehiculo Creado!',
-      subTitle: 'Usted ha Creado un vehiculo con Exito!',
-      buttons: ['Aceptar']
-    });
-    alert.present();  
+  const usuarioJson = { codusua: '1',
+    contrasena: 'admin',
+    direccion: 'cra 10',
+    email: 'daniel@hotmail.com',
+    nombre: 'daniel',
+    regisTelef: '31' };
 
-this.CargarVehiculo();
+  const body = {
+    caracteristicas: caracteristicas,
+    codvehi: 3,
+    fkCodusua : usuarioJson,
+    placa: placa,
+    };
 
-});
+  console.log(body)
+
+  this.http.post('http://192.168.1.50:8080/monitoreo/webresources/co.edu.monitoreo.entidades.vehiculo',body,optionspost).subscribe(data => {
+      
+      let alert = this.alertCtrl.create({
+        title: 'Vehiculo Creado!',
+        subTitle: 'Usted ha Creado un vehiculo con Exito!',
+        buttons: ['Aceptar']
+      });
+      alert.present();  
+
+  this.CargarVehiculo();
+
+  });
 }   
 
- /* loadViajeros() {        
-    return this.http.get('http://localhost:8080/tiquetesapp/webresources/entidades.viajero/?results=25');
-  }*/
+eliminarVehiculo(placa:string){   
+  
+  this.headersPost = new Headers({
+    'Content-Type':'application/x-www-form-urlencoded',
+    'Access-Control-Allow-Origin':'*',
+    'user':'1',
+    'passwd':'admin'
+  });
+
+  let optionspost = new RequestOptions({
+    headers: this.headersPost
+  })
+
+
+  const body = {
+    placa: placa
+    };
+
+  console.log(body)
+
+  this.http.put('http://192.168.1.50:8080/monitoreo/webresources/co.edu.monitoreo.entidades.vehiculo',body,optionspost).subscribe(data => {
+      
+      let alert = this.alertCtrl.create({
+        title: 'Vehiculo Eliminado!',
+        subTitle: 'Usted ha Eliminado un vehiculo con Exito!',
+        buttons: ['Aceptar']
+      });
+      alert.present();  
+
+  this.CargarVehiculo();
+
+  });
+}   
 
 }

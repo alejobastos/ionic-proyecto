@@ -9,11 +9,12 @@ import { HttpModule } from "@angular/http";
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {LoginPage} from '../pages/login/login';
-import { NewProductPage} from '../pages/new-product/new-product';
 import { LoginServicesProvider } from '../providers/login-services/login-services';
-import { ProductServicesProvider } from '../providers/product-services/product-services';
 import { Vehiculo } from '../app/interfaces/vehiculo.interface';
 import { ServiceProvider } from '../providers/service/service';
+import { AddvehiculoPage } from "../pages/addvehiculo/addvehiculo";
+import { ModalController } from 'ionic-angular';
+
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { ServiceProvider } from '../providers/service/service';
     MyApp,
     HomePage,
     LoginPage,
-    NewProductPage
+    AddvehiculoPage
+    
   ],
   imports: [
     BrowserModule,
@@ -33,14 +35,14 @@ import { ServiceProvider } from '../providers/service/service';
     MyApp,
     HomePage,
     LoginPage,
-    NewProductPage
+    AddvehiculoPage
+  
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoginServicesProvider,
-    ProductServicesProvider,
     ServiceProvider
   ]
 })

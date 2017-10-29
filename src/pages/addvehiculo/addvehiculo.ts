@@ -21,8 +21,9 @@ import { ServiceProvider } from "../../providers/service/service";
   templateUrl: 'addvehiculo.html',
 })
 export class AddvehiculoPage {
-
-  vehiculo:Vehiculo [] = [];
+  placa: string;
+  caracteristica: string;
+  estado: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public modalCtrl: ModalController, private Service:ServiceProvider) {
   }
@@ -32,7 +33,6 @@ export class AddvehiculoPage {
   }
 
   ngOnInit() {
-    //this.viajero = new Viajero("","","","","");    
   }
   
   agregarVehiculo() {
@@ -41,7 +41,7 @@ export class AddvehiculoPage {
   }
 
   guardarvehiculo(){            
-    this.Service.guardarVehiculo(this.vehiculo);
+    this.Service.guardarVehiculo(this.placa, this.caracteristica, this.estado);
     
   }
 
